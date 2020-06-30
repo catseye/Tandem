@@ -4,6 +4,7 @@ import System.Environment
 import System.Exit
 import System.IO
 
+import qualified Language.Tandem.Rule as Rule
 import qualified Language.Tandem.Parser as Parser
 import qualified Language.Tandem.Eval as Eval
 
@@ -12,17 +13,17 @@ main = do
     args <- getArgs
     case args of
         ["parse", fileName] -> do
-            expr <- loadSource fileName
-            putStrLn $ show expr
+            rule <- loadSource fileName
+            putStrLn $ show rule
         ["eval", fileName] -> do
-            expr <- loadSource fileName
-            putStrLn $ show $ Eval.evalTandem expr
+            rule <- loadSource fileName
+            putStrLn $ show $ Eval.rewrite rule Rule.emptyCollection
         _ -> do
             abortWith "Usage: tandem (parse|eval) <input-filename>"
 
 loadSource fileName = do
     text <- readFile fileName
-    case Parser.parseTandem text of
+    case Parser.parseRule text of
         Right expr -> do
             return expr
         Left error ->
