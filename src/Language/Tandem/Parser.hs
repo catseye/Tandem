@@ -5,7 +5,6 @@ import Text.ParserCombinators.Parsec
 
 import Language.Tandem.Rule
 
--- TODO: optional strings
 -- TODO: pragmas
 -- TODO: % reverse syntax
 
@@ -44,10 +43,10 @@ parenthesized = do
 
 individual = do
     l <- (quotedString <|> bareLabel)
-    s <- (quotedString <|> bareWord)
+    s <- option "" (quotedString <|> bareWord)
     so <- option False ellipsis
     arrow
-    t <- (quotedString <|> bareWord)
+    t <- option "" (quotedString <|> bareWord)
     to <- option False ellipsis
     return $ case (so, to) of
        (False, False) -> RewExact l s t
