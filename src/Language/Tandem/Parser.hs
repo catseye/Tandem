@@ -5,19 +5,24 @@ import Text.ParserCombinators.Parsec
 
 import Language.Tandem.Rule
 
+-- TODO: optional strings
+-- TODO: pragmas
+-- TODO: asteration
+-- TODO: % reverse syntax
+
 rule = disj
 
 disj = do
     r1 <- conj
-    r2 <- option Zero (do{ keyword "|";  disj })
-    return $ (if r2 == Zero then r1 else Disj r1 r2)
+    r2 <- option Zero (do{ keyword "|"; disj })
+    return $ if r2 == Zero then r1 else Disj r1 r2
 
 conj = do
     r1 <- term
-    r2 <- option One (do{ keyword "&";  conj })
-    return $ (if r2 == One then r1 else Conj r1 r2)
+    r2 <- option One (do{ keyword "&"; conj })
+    return $ if r2 == One then r1 else Conj r1 r2
 
-term = zero <|> one <|> parenthesized <|> rewExact -- <|> rewReplace <|> rewFront
+term = zero <|> one <|> parenthesized <|> individual
 
 zero = do
     keyword "0"
@@ -33,12 +38,25 @@ parenthesized = do
     keyword ")"
     return r
 
-rewExact = do
+individual = do
     l <- (quotedString <|> bareLabel)
     s <- (quotedString <|> bareWord)
-    keyword "->"
+    so <- option False ellipsis
+    arrow
     t <- (quotedString <|> bareWord)
-    return $ RewExact l s t
+    to <- option False ellipsis
+    return $ case (so, to) of
+       (False, False) -> RewExact l s t
+       (True, False) -> RewReplace l s t
+       (True, True) -> RewFront l s t
+
+arrow = do
+   keyword "->" <|> keyword "→"
+   return ()
+
+ellipsis = do
+   keyword "..." <|> keyword "…"
+   return True
 
 --
 -- Low level: Concrete things
