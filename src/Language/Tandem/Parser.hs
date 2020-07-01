@@ -7,7 +7,6 @@ import Language.Tandem.Rule
 
 -- TODO: optional strings
 -- TODO: pragmas
--- TODO: asteration
 -- TODO: % reverse syntax
 
 rule = disj
@@ -18,9 +17,14 @@ disj = do
     return $ if r2 == Zero then r1 else Disj r1 r2
 
 conj = do
-    r1 <- term
+    r1 <- star
     r2 <- option One (do{ keyword "&"; conj })
     return $ if r2 == One then r1 else Conj r1 r2
+
+star = do
+    r <- term
+    b <- option False (do{ keyword "*"; return True })
+    return $ if b then (Many r) else r
 
 term = zero <|> one <|> parenthesized <|> individual
 
