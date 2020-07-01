@@ -2,7 +2,7 @@ module Language.Tandem.Rule where
 
 import qualified Data.Map as Map
 
-type Label = Char
+type Label = String
 
 data Rule = Zero
           | One

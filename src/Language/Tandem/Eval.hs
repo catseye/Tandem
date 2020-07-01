@@ -27,10 +27,7 @@ rewrite (Disj r1 r2) c =
 rewrite (Conj r1 r2) c =
     case (rewrite r1 c) of
         Nothing -> Nothing
-        Just c1 ->
-            case (rewrite r2 c1) of
-                Nothing -> Nothing
-                Just c2 -> Just c2
+        Just c1 -> rewrite r2 c1
 
 rewrite (Many r) c =
     case (rewrite r c) of
