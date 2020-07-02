@@ -6,7 +6,6 @@ import Text.ParserCombinators.Parsec
 import Language.Tandem.Rule
 
 -- TODO: pragmas
--- TODO: % reverse syntax
 
 rule = disj
 
@@ -25,7 +24,7 @@ star = do
     b <- option False (do{ keyword "*"; return True })
     return $ if b then (Many r) else r
 
-term = zero <|> one <|> parenthesized <|> individual
+term = zero <|> one <|> parenthesized <|> reverseIndividual <|> individual
 
 zero = do
     keyword "0"
@@ -52,6 +51,19 @@ individual = do
        (False, False) -> RewExact l s t
        (True, False) -> RewReplace l s t
        (True, True) -> RewFront l s t
+
+reverseIndividual = do
+    keyword "%"
+    l <- (quotedString <|> bareLabel)
+    so <- option False ellipsis
+    s <- option "" (quotedString <|> bareWord)
+    arrow
+    to <- option False ellipsis
+    t <- option "" (quotedString <|> bareWord)
+    return $ case (so, to) of
+       (False, False) -> RewExact l (reverse s) (reverse t)
+       (True, False) -> RewReplace l (reverse s) (reverse t)
+       (True, True) -> RewFront l (reverse s) (reverse t)
 
 arrow = do
    keyword "->" <|> keyword "→"
