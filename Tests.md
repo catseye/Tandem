@@ -64,7 +64,17 @@ Basic Semantics
 Pragmas
 -------
 
-    {!This →is "my comment%.}
+    -> Tests for functionality "Run Tandem Program"
+
+    -> Functionality "Run Tandem Program" is implemented by
+    -> shell command "bin/tandem run %(test-body-file)"
+
     {B:I,O}
-    (Q → 1 & R… → 1 | Q1 → 2 & R… → 2)*
-    ===> Just (fromList [("Q","2"),("R","2")])
+    {!This →is "my comment%.}
+    (Ia…->… & %O…->…b)*
+    <== aaa
+    ==> bbb
+
+    {B:B,B}1
+    <== Revcat me!
+    ==> !em tacveR
