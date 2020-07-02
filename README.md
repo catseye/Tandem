@@ -114,19 +114,19 @@ For ease of typing, `->` is allowed as a synonym for `→`, and `...` is allowed
 
 A stack may be labelled with any string. The most common choice is a single uppercase Latin alphabetic character, in which case no special syntax is needed. For other names, the label must be enclosed in double-quotes.
 
-`Ab→c`
-“`A`”`b→c`
-“`29glerph`”`b→c`
+    Ab→c
+    "A"b→c
+    "29glerph"b→c
 
 The strings to be rewritten may also be quoted, and this is how one can get spaces and special forms such as `->` and `...` onto a stack.
 
-`Ab→" c"`
-“`->`”“`->`”`->`“`->`”
+    Ab→" c"
+    "->""->"->"->"
 
 Spaces between the label, the strings, the ..., and the -&gt; are otherwise ignored. The following are equivalent:
 
-`Ab…→c…`
-`A b … → c …`
+    Ab…→c…
+    A b … → c …
 
 Inside a quoted string, three escape sequences are recognized:
 
@@ -136,8 +136,8 @@ Inside a quoted string, three escape sequences are recognized:
 
 As a matter of syntactic sugar, the format of the … forms of the individual rules may be reversed by preceding the rule with a `%` symbol. This is convenient for when you want to think of the stack as having its top element on the right edge of the string, rather than the left. (It is not stored differently in any way, it is merely a sugar on the notation).
 
-`%C…a → …b`
-`%C…foo → foo`
+    %C…a → …b
+    %C…foo → foo
 
 Initial State
 -------------
