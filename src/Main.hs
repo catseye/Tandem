@@ -23,9 +23,9 @@ main = do
 
 loadSource fileName = do
     text <- readFile fileName
-    case Parser.parseRule text of
-        Right expr -> do
-            return expr
+    case Parser.parseTandem text of
+        Right (pragmas, rule) -> do
+            return rule
         Left error ->
             abortWith $ show error
 

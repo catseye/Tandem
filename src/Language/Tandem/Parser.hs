@@ -1,11 +1,34 @@
 {-# LANGUAGE FlexibleContexts #-}
 module Language.Tandem.Parser where
 
-import Text.ParserCombinators.Parsec
+import Text.ParserCombinators.Parsec hiding (label)
 
 import Language.Tandem.Rule
+import Language.Tandem.Pragma
 
--- TODO: pragmas
+tandem = do
+    ps <- many pragma
+    r <- rule
+    return (ps, r)
+
+pragma = do
+    keyword "{"
+    c <- comment <|> batchIOpragma
+    keyword "}"
+    return c
+
+comment = do
+    keyword "!"
+    s <- many $ satisfy (\x -> x /= '}')
+    return $ Comment s
+
+batchIOpragma = do
+    keyword "B"
+    keyword ":"
+    i <- label
+    keyword ","
+    o <- label
+    return $ BatchIO i o
 
 rule = disj
 
@@ -41,7 +64,7 @@ parenthesized = do
     return r
 
 individual = do
-    l <- (quotedString <|> bareLabel)
+    l <- label
     s <- option "" (quotedString <|> bareWord)
     so <- option False ellipsis
     arrow
@@ -54,7 +77,7 @@ individual = do
 
 reverseIndividual = do
     keyword "%"
-    l <- (quotedString <|> bareLabel)
+    l <- label
     so <- option False ellipsis
     s <- option "" (quotedString <|> bareWord)
     arrow
@@ -64,6 +87,8 @@ reverseIndividual = do
        (False, False) -> RewExact l (reverse s) (reverse t)
        (True, False) -> RewReplace l (reverse s) (reverse t)
        (True, True) -> RewFront l (reverse s) (reverse t)
+
+label = quotedString <|> bareLabel
 
 arrow = do
    keyword "->" <|> keyword "→"
@@ -102,4 +127,4 @@ quotedString = do
 -- Driver
 --
 
-parseRule text = parse rule "" text
+parseTandem text = parse tandem "" text

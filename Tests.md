@@ -60,3 +60,11 @@ Basic Semantics
 
     (Q → 1 & R… → 1 | Q1 → 2 & R… → 2)*
     ===> Just (fromList [("Q","2"),("R","2")])
+
+Pragmas
+-------
+
+    {!This →is "my comment%.}
+    {B:I,O}
+    (Q → 1 & R… → 1 | Q1 → 2 & R… → 2)*
+    ===> Just (fromList [("Q","2"),("R","2")])
