@@ -144,10 +144,10 @@ Initial State
 
 At the beginning of a Tandem program with rewrite rule R, it can be assumed that, under normal conditions, for each label mentioned in the program, there exists a labelled stack in the collection with that label and it is initialized with an empty string. This leads to the following idiom to initialize stacks with initial values:
 
-`S→0 &`
-`T→$ &`
-`K→1111 &`
-*`...rest`` ``of`` ``program`` ``goes`` ``here...`*
+    S→0 &
+    T→$ &
+    K→1111 &
+    ...rest of program goes here...
 
 Pragmas
 -------
@@ -192,57 +192,57 @@ Example programs
 
 [Hello, world!](https://esolangs.org/wiki/Hello,_world!), using batch I/O.
 
-`{B:I,O}%O… → `“`Hello,`` ``world!`”
+    {B:I,O}%O… → "Hello, world!"
 
 [Cat program](https://esolangs.org/wiki/Cat_program), using batch I/O. Note that this only supports inputs consisting of `0`'s and `1`'s, so a better title might be “binary cat program”.
 
-`{B:I,O}`
-`Q→0 &`
-`(`
-`  Q0→0 & I0…→… & %O…→…0 |`
-`  Q0→0 & I1…→… & %O…→…1 |`
-`  Q0→1 & I→`
-`)*`
+    {B:I,O}
+    Q→0 &
+    (
+      Q0→0 & I0…→… & %O…→…0 |
+      Q0→0 & I1…→… & %O…→…1 |
+      Q0→1 & I→
+    )*
 
 [Reverse cat](https://esolangs.org/wiki/Reverse_cat) program, using batch I/O. Unlike the above this will accept arbitrary characters in the input. On the other hand, it is rather cheaty. To make it a valid program, there needs to be a rewrite rule, so we choose one that we know will simply always succeed.
 
-`{B:B,B}1`
+    {B:B,B}1
 
 ### Implementing Automata in Tandem
 
 Writing finite automata, push-down automata, Turing machines, and other automata is quite natural in Tandem, because transition rules such as “In state 4, if the next character in the input is `g`, consume it and push `$` onto the stack and go to state 9” translate quite straightforwardly to rewrite rules such as
 
-`Q4 → 9 & Ig… → … & K… → $…`
+    Q4 → 9 & Ig… → … & K… → $…
 
 #### Finite-state automaton
 
 Here is a [finite-state automaton](https://esolangs.org/wiki/finite-state_automaton) that recognizes the strings `cat` and `cot`, but no others.
 
-`{B:I,O}`
-`Q → 0 &`
-`O → N &`
-`(`
-`  Q0 → 1 & Ic… → … |`
-`  Q1 → 2 & Ia… → … |`
-`  Q1 → 2 & Io… → … |`
-`  Q2 → 3 & It → & O… → Y`
-`)*`
+    {B:I,O}
+    Q → 0 &
+    O → N &
+    (
+      Q0 → 1 & Ic… → … |
+      Q1 → 2 & Ia… → … |
+      Q1 → 2 & Io… → … |
+      Q2 → 3 & It → & O… → Y
+    )*
 
 #### Push-down automaton
 
 Here is a [push-down automaton](https://esolangs.org/wiki/push-down_automaton) that recognizes strings of nested parentheses.
 
-`{B:I,O}`
-`O → N &`
-`Q → 0 &`
-`K → $ &`
-`(`
-`  Q0 → 1 & I`“`(`”`… → … & K… → $… |`
-`  Q1 → 1 & I`“`(`”`… → … & K… → X… |`
-`  Q1 → 1 & I`“`)`”`… → … & KX… → … |`
-`  Q1 → 0 & I`“`)`”`… → … & K$… → … |`
-`  Q0 → 2 & I → & O… → Y`
-`)*`
+    {B:I,O}
+    O → N &
+    Q → 0 &
+    K → $ &
+    (
+      Q0 → 1 & I`“`(`”`… → … & K… → $… |
+      Q1 → 1 & I`“`(`”`… → … & K… → X… |
+      Q1 → 1 & I`“`)`”`… → … & KX… → … |
+      Q1 → 0 & I`“`)`”`… → … & K$… → … |
+      Q0 → 2 & I → & O… → Y
+    )*
 
 #### Turing machine
 
@@ -261,18 +261,18 @@ Here is an arbitrarily-chosen [Turing machine](https://esolangs.org/wiki/Turing_
 
 Here we implement it in Tandem. We store the left half of the tape reversed in the L stack and the right half in the R stack. The tape cell under the tape head is the top element of the R stack.
 
-`Q → 0      &`
-`L →        &`
-`R → 111110 &`
-`(`
-`  Q0 → 1 & R0… → 0…             |`
-`  Q0 → 0 & R1… → …   & %L… → …1 |`
-`  Q1 → 1 & R0… → …   & %L… → …1 |`
-`  Q1 → 2 & R1… → 01… & %L…0 → … |`
-`  Q1 → 2 & R1… → 11… & %L…1 → … |`
-`  Q2 → 2 & R0… → …   & %L… → …1 |`
-`  Q2 → 3 & R1… → 0…`
-`)*`
+    Q → 0      &
+    L →        &
+    R → 111110 &
+    (
+      Q0 → 1 & R0… → 0…             |
+      Q0 → 0 & R1… → …   & %L… → …1 |
+      Q1 → 1 & R0… → …   & %L… → …1 |
+      Q1 → 2 & R1… → 01… & %L…0 → … |
+      Q1 → 2 & R1… → 11… & %L…1 → … |
+      Q2 → 2 & R0… → …   & %L… → …1 |
+      Q2 → 3 & R1… → 0…
+    )*
 
 #### Minsky machine
 
@@ -283,11 +283,11 @@ In a [Minsky machine](https://esolangs.org/wiki/Minsky_machine) there are two ki
 
 Using unary for the register contents, the first kind can be written as
 
-`R… → X… & Q5 → 6`
+    R… → X… & Q5 → 6
 
 The second kind can be written as
 
-`RX… → … & Q5 → 6 | R → & Q5 → 3`
+    RX… → … & Q5 → 6 | R → & Q5 → 3
 
 where the “next instruction” after instruction 5, is instruction 6 (and “some other instruction” is, in this instance, instruction 3.)
 
