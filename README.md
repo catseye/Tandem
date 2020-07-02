@@ -1,11 +1,19 @@
 Tandem
 ======
 
-**Tandem** is an experimental rewriting language where the rewrite rules form a Kleene algebra.
+_Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/Tandem)
+| _See also:_ [Squishy2K](https://github.com/catseye/Squishy2K)
+∘ [Strelnokoff](https://github.com/catseye/Strelnokoff)
+∘ [Arboretuum](https://github.com/catseye/Arboretuum)
+∘ [Tamsin](https://github.com/catseye/Tamsin)
 
-The object being rewritten by a Tandem program is a collection of labelled stacks. This can be thought of as a finite mapping from strings to strings. The strings are always rewritten at the left edge, so they are effectively stacks.
+- - - -
 
-A Tandem program consists of a single rewrite rule along with zero or more pragmas. The rewrite rule is applied to an initial state to possibly obtain a final state. The rule is applied only once, however it may contain subcomponents that are applied many times.
+**Tandem** is an experimental rewriting language where the rewrite rules form a [Kleene algebra](https://en.wikipedia.org/wiki/Kleene_algebra).
+
+The object being rewritten by a Tandem program is a collection of labelled stacks -- a finite mapping from strings to strings. The strings are always rewritten at the left edge, so they are effectively stacks.
+
+A Tandem program consists of a single rewrite rule along with zero or more pragmas. The rewrite rule is applied to an initial state to possibly obtain a final state. This rule is applied only once. However, in Tandem, a rule is a composite object which may contain subrules that get applied many times.
 
 Rewrite rules
 -------------
@@ -27,13 +35,11 @@ A rewrite rule may either match and change the state, match and make no change t
 
 In the following, we say M(R,S) for the set of labelled stacks that would be matched by R in some state S. These are the redexes of R in S. If M(R,S) is the empty set then R fails to match on S.
 
-Tandem is, at its core, nondeterministic: a rule can match multiple redexes, and the language gives no guidance as to which of those redexes it should select for rewriting. Thus it is up to an implementation to decide what to do when multiple redexes match.
-
-However, it is expected that most implementations of Tandem will provide a “strictly deterministic” mode of execution where, if a rule matches more than one redex during program execution, an unrecoverable error to the effect of “multiple rewrite choices encountered” occurs.
+In general, a rule can match multiple redexes, i.e., M(R,S) can contain more than one element. However, if a rule matches more than one redex during program execution, an unrecoverable error to the effect of “multiple rewrite choices encountered” occurs. This determinism is so that the algebraic rules work out nicely. If some implementations wish to experiment with other ways of resolving the non-determinism when this happens, they may do so by defining implementation-specific pragma.
 
 #### 0 and 1
 
-**0** is an artifical rewrite rule that always fails to match. **1** is an artifical rewrite rule that always succeeds in matching, and changes nothing. These are the identity elements for disjunction and conjunction respectively. More will be said about them later.
+**0** is an artificial rewrite rule that always fails to match. **1** is an artificial rewrite rule that always succeeds in matching, and changes nothing. These are the identity elements for disjunction and conjunction respectively. More will be said about them later.
 
 #### Individual rewrite rules
 
@@ -138,10 +144,10 @@ Initial State
 
 At the beginning of a Tandem program with rewrite rule R, it can be assumed that, under normal conditions, for each label mentioned in the program, there exists a labelled stack in the collection with that label and it is initialized with an empty string. This leads to the following idiom to initialize stacks with initial values:
 
-`S→0 |`
-`T→$ |`
-`K→1111 |`
-`...etc...`
+`S→0 &`
+`T→$ &`
+`K→1111 &`
+*`...rest`` ``of`` ``program`` ``goes`` ``here...`*
 
 Pragmas
 -------
@@ -184,23 +190,23 @@ Example programs
 
 ### Rudimentary examples
 
-[Hello, world!](Hello,_world! "wikilink"), using batch I/O.
+[Hello, world!](https://esolangs.org/wiki/Hello,_world!), using batch I/O.
 
 `{B:I,O}%O… → `“`Hello,`` ``world!`”
 
-[Cat program](Cat_program "wikilink"), using batch I/O. Note that this only supports inputs consisting of `0`'s and `1`'s, so a better title might be “binary cat program”.
+[Cat program](https://esolangs.org/wiki/Cat_program), using batch I/O. Note that this only supports inputs consisting of `0`'s and `1`'s, so a better title might be “binary cat program”.
 
 `{B:I,O}`
+`Q→0 &`
 `(`
-`  Q→0`
 `  Q0→0 & I0…→… & %O…→…0 |`
 `  Q0→0 & I1…→… & %O…→…1 |`
 `  Q0→1 & I→`
 `)*`
 
-[Reverse cat](Reverse_cat "wikilink") program, using batch I/O. Unlike the above this will accept arbitrary characters in the input. On the other hand, it is rather cheaty. To make it a valid program, there needs to be a rewrite rule, so we choose one that we know will simply never succeed.
+[Reverse cat](https://esolangs.org/wiki/Reverse_cat) program, using batch I/O. Unlike the above this will accept arbitrary characters in the input. On the other hand, it is rather cheaty. To make it a valid program, there needs to be a rewrite rule, so we choose one that we know will simply always succeed.
 
-`{B:B,B}0`
+`{B:B,B}1`
 
 ### Implementing Automata in Tandem
 
@@ -210,12 +216,12 @@ Writing finite automata, push-down automata, Turing machines, and other automata
 
 #### Finite-state automaton
 
-Here is a [finite-state automaton](finite-state_automaton "wikilink") that recognizes all strings beginning with `cat` or `cot`.
+Here is a [finite-state automaton](https://esolangs.org/wiki/finite-state_automaton) that recognizes the strings `cat` and `cot`, but no others.
 
 `{B:I,O}`
+`Q → 0 &`
+`O → N &`
 `(`
-`  Q → 0 |`
-`  O → N |`
 `  Q0 → 1 & Ic… → … |`
 `  Q1 → 2 & Ia… → … |`
 `  Q1 → 2 & Io… → … |`
@@ -224,13 +230,13 @@ Here is a [finite-state automaton](finite-state_automaton "wikilink") that recog
 
 #### Push-down automaton
 
-Here is a [push-down automaton](push-down_automaton "wikilink") that recognizes strings of nested parentheses.
+Here is a [push-down automaton](https://esolangs.org/wiki/push-down_automaton) that recognizes strings of nested parentheses.
 
 `{B:I,O}`
+`O → N &`
+`Q → 0 &`
+`K → $ &`
 `(`
-`  O → N |`
-`  Q → 0 |`
-`  K → $ |`
 `  Q0 → 1 & I`“`(`”`… → … & K… → $… |`
 `  Q1 → 1 & I`“`(`”`… → … & K… → X… |`
 `  Q1 → 1 & I`“`)`”`… → … & KX… → … |`
@@ -240,7 +246,7 @@ Here is a [push-down automaton](push-down_automaton "wikilink") that recognizes 
 
 #### Turing machine
 
-Here is an arbitrarily-chosen [Turing machine](Turing_machine "wikilink"):
+Here is an arbitrarily-chosen [Turing machine](https://esolangs.org/wiki/Turing_machine):
 
 -   In state 0, if the symbol on tape is:
     -   0, enter state 1;
@@ -255,11 +261,11 @@ Here is an arbitrarily-chosen [Turing machine](Turing_machine "wikilink"):
 
 Here we implement it in Tandem. We store the left half of the tape reversed in the L stack and the right half in the R stack. The tape cell under the tape head is the top element of the R stack.
 
+`Q → 0      &`
+`L →        &`
+`R → 111110 &`
 `(`
-`  Q → 0 |`
-`  L →   |`
-`  R → 111110 |`
-`  Q0 → 1 & R0… → 0…                  |`
+`  Q0 → 1 & R0… → 0…             |`
 `  Q0 → 0 & R1… → …   & %L… → …1 |`
 `  Q1 → 1 & R0… → …   & %L… → …1 |`
 `  Q1 → 2 & R1… → 01… & %L…0 → … |`
@@ -270,18 +276,18 @@ Here we implement it in Tandem. We store the left half of the tape reversed in t
 
 #### Minsky machine
 
-In a [Minsky machine](Minsky_machine "wikilink") there are two kinds of instructions:
+In a [Minsky machine](https://esolangs.org/wiki/Minsky_machine) there are two kinds of instructions:
 
 -   increment some register and jump to the next instruction
 -   decrement some register and jump to the next instruction, unless it is already zero, in which jump to some other instruction.
 
 Using unary for the register contents, the first kind can be written as
 
-`R... -> X... & Q5 -> 6`
+`R… → X… & Q5 → 6`
 
 The second kind can be written as
 
-`RX... -> ... & Q5 -> 6 | R-> & Q5 -> 3`
+`RX… → … & Q5 → 6 | R → & Q5 → 3`
 
 where the “next instruction” after instruction 5, is instruction 6 (and “some other instruction” is, in this instance, instruction 3.)
 
@@ -292,22 +298,39 @@ A conventional rewrite system presents a collection of rewrite rules, and picks 
 
 In Tandem, there is only one rule and its application is only performed once. Disjunction (Ri | Rj) corresponds to picking a rule to apply from a collection of rules. Asteration (R\*) corresponds to the iterative process of applying rules until none apply.
 
-Conjunction (Ri & Rj) is itended to serve as a way to write conditional rewrite rules, but the comparison is approximate. In Tandem's case, instead of purely being a condition, the LHS of the conjunction is some other part of the stack-collection that acts as a “gate” on the rewrite rule -- but this LHS may get rewritten itself too. In a sense, multiple matching redexes can get rewritten at once, so long as they all match -- and this, by the way, is where the name “tandem” comes from.
+Conjunction (Ri & Rj) is intended to serve as a way to write conditional rewrite rules, but the comparison is approximate. In Tandem's case, instead of purely being a condition, the LHS of the conjunction is some other part of the stack-collection that acts as a “gate” on the rewrite rule -- but this LHS may get rewritten itself too. In a sense, multiple matching redexes can get rewritten at once, so long as they all match -- and this, by the way, is where the name “tandem” comes from.
 
 In most conventional rewrite systems, the redex (the part of the object to be rewritten) is searched for at each rewrite step. For instance, in a term rewriting language, the leftmost-bottommost matching subterm might be rewritten at each step. In Tandem, the stacks are labelled and it is always the top of the stack that is rewritten, so essentially no actual searching takes place.
+
+Non-terminating computations
+----------------------------
+
+Because Tandem is Turing-complete, applying a rule to a collection of stacks might not terminate, and there is no way to detect this in general. We call such a situation ⊥ (pronounced “bottom”).
+
+We need to make sure our operators make sense in the presence of bottom.
+
+For conjunction, ⊥ & R = R & ⊥ = ⊥. This is intuitively justified.
+
+For disjunction, ⊥ | R = ⊥ (if the first rule matched) or R (if the second rule matched); if both rules matched it was a runtime error (which we could also think of as ⊥, but anyway let's not go there quite yet).
+
+For asteration, ⊥\* = ⊥.
 
 Algebraic properties
 --------------------
 
 Disjunction is associative and commutative and idempotent, like set union.
 
-Disjunction has as its identity element an artificial rewrite rule which we call **0** and which never succeeds in matching. For all R, R | **0** = **0** | R = R. **0** may appear directly in a program, as a symbolic constant for a rule.
+Disjunction has as its identity element an artificial rewrite rule which we call **0** and which never succeeds in matching. For all R, R | **0** = **0** | R = R. **0** may appear directly in a program, as a rule named `0`.
 
 Conjunction is associative and idempotent.
 
-Conjunction has as its identity element an artificial rewrite rule which we call **1** and which always succeeds in matching and always makes no change when it is applied. For all R, R & **1** = **1** & R = R. **1** may appear directly in a program, as a symbolic constant for a rule.
+Conjunction has as its identity element an artificial rewrite rule which we call **1** and which always succeeds in matching and always makes no change when it is applied. For all R, R & **1** = **1** & R = R. **1** may appear directly in a program, as a rule named `1`.
 
 When they are combined, we can see that conjunction left-distributes over disjunction: Ri & (Rj | Rk) = (Ri & Rj) | (Ri & Rk). This is justified intuitively by the following: if A matches, then one of B or C matches, a rewrite can occur; also, if one of A matches then B matches, or A matches then C matches, a rewrite can occur; and the possible rewrites that can occur in both scenarios are the same.
+
+Left-distribution plays nicely with ⊥ because Ri & (⊥ | Rj) = (Ri & ⊥) | (Ri & Rj), that is to say, there is one non-terminating path in the LHS, and one non-terminating path in the RHS, in the same place.
+
+Conjunction also right-distributes over disjunction: (Ri | Rj) & Rk = (Ri & Rk) | (Rj & Rk). This also plays nicely with ⊥ because (⊥ | Rj) & Rk = (⊥ & Rk) | (Rj & Rk).
 
 From these properties we can conclude that the set of rules with disjunction and conjunction forms a semiring.
 
@@ -323,32 +346,36 @@ When asteration is added, the semiring becomes a [Kleene algebra](https://en.wik
 
 It's possible to write any Tandem program as a single asteration around a single, asteration-less expression. The Turing machine example proves this; in the worst case you could rewrite your program as a TM and simulate it like that. This is more due to the “single while loop folk theorem” than to any algebraic property; however the author is hopeful that one could produce an algebraic justification for the property, by showing that every Tandem program can be put in a disjunctive normal form with a single asteration.
 
-### Commutors and Distributors
+### Commutors
 
 We can also observe that, even though Ri & Rj is non-commutative (first Ri is applied, then Rj,) if the set of labels involved in some particular Ri is disjoint with the set of labels involved in some particular Rj then for those particular rules, Ri & Rj commutes.
 
 All the example programs given so far, including the Turing machine example, have conjunctive clauses where the rules commute. So it's possible to write any Tandem program with commuting conjunctive clauses, even though & is not in general commutative.
 
-Also, even though & and | are left-distributive, they are not right-distributive in general. However, if, in (Ri | Rj) & Rk, the subrule (Ri | Rj) is guaranteed to terminate, then it may be distributed, to (Ri & Rk) | (Rj & Rk).
-
-Since we are informed that [fast-and-loose reasoning is morally correct](https://www.cs.ox.ac.uk/jeremy.gibbons/publications/fast+loose.pdf), we may choose to assume the rules will always terminate and make these algebraic manipulations without feeling at all guilty about it.
-
 Computational class
 -------------------
 
-A brief study of how the Turing machine in the example code section was implemented in Tandem should suffice to convince there is a straightforward method for implementing Turing machines in Tandem, which will work for any Turing machine; therefore Tandem is Turing-complete.
+A brief study of the Turing machine and the Minsky machine in the example code section should suffice to convince one there are straightforward methods for implementing arbitrary Turing machines and Minksy machines in Tandem; therefore Tandem is Turing-complete.
 
 It's interesting to consider subsets of the language though.
 
-Without \* it is not Turing-complete because it can only make a bounded number of rewrites.
+Without \* it is not Turing-complete because it can only make a fixed number of rewrites.
 
 Without & it is (the author believes) not Turing-complete, because each rule can only rewrite a single stack -- there is no way to “communicate” between the stacks.
 
 Without the *ls*… → *t*… form it is (the author believes) not Turing-complete, as all the labelled values are no longer stacks, but only registers of bounded size; it is complete only for finite-state automata.
 
+Without the *ls*… → *t* form it is (the author believes) still Turing-complete, but gains the following property: a rewrite succeeded iff the state changed. This raises the question of what the distinction between **0** and **1** actually is then, and whether the algebraic properties still work out.
+
 If only one stack can have *ls*… → *t*… form rules applied to it, then it is (the author believes) complete only for the push-down automata.
+
+If the number of stacks is limited to 3, it is still Turing-complete (2 stacks to simulate a tape, and another to simulate a finite control).
+
+If the number of stacks is limited to 2, it is still Turing-complete, as the finite control can be stored on the tape, next to the current tape cell, and moved along the tape as the tape head moves.
+
+If the number of stacks is limited to 1, it is not Turing-complete, as it cannot even simulate a tape.
 
 Acknowledgements
 ----------------
 
-Many thanks to <User:arseniiv> for pointing out problems with the initial formulation of the algebra, as well as finding errors in the example programs.
+Many thanks to [arseniiv](https://esolangs.org/wiki/User:arseniiv) for pointing out problems with the initial formulation of the algebra, as well as finding errors in the language description and example programs.
