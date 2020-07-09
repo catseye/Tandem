@@ -4,6 +4,7 @@ Tandem
 _Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/Tandem)
 | _See also:_ [Squishy2K](https://github.com/catseye/Squishy2K)
 ∘ [Strelnokoff](https://github.com/catseye/Strelnokoff)
+∘ [Cabra](https://github.com/catseye/Cabra)
 ∘ [Arboretuum](https://github.com/catseye/Arboretuum)
 ∘ [Tamsin](https://github.com/catseye/Tamsin)
 
@@ -311,9 +312,16 @@ We need to make sure our operators make sense in the presence of bottom.
 
 For conjunction, ⊥ & R = R & ⊥ = ⊥. This is intuitively justified.
 
-For disjunction, ⊥ | R = ⊥ (if the first rule matched) or R (if the second rule matched); if both rules matched it was a runtime error (which we could also think of as ⊥, but anyway let's not go there quite yet).
+For disjunction, ⊥ | R = R | ⊥ = ⊥. This is justified by the observation that, in order to know if both Ri and Rj match (which
+would be a runtime error (which we could also think of as ⊥, but anyway let's not go there quite yet)) we must, in essence,
+speculatively execute both Ri and Rj, and during this speculative execution, it is possible that one or both of them will
+fail to terminate, meaning that their disjunction will also fail to terminate.
 
 For asteration, ⊥\* = ⊥.
+
+(I think the laws for ⊥ do not lead to the algebraic structure becoming inconsistent — but if they do,
+we needn't feel the least guilty about it, as we are informed that
+[fast and loose reasoning is morally correct](https://www.cs.ox.ac.uk/jeremy.gibbons/publications/fast+loose.pdf).)
 
 Algebraic properties
 --------------------
