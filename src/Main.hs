@@ -26,7 +26,7 @@ main = do
                 Just result -> tearDownPragmas pragmas result
                 Nothing -> exitWith $ ExitFailure 1
         _ -> do
-            abortWith "Usage: tandem (parse|eval) <input-filename>"
+            abortWith "Usage: tandem (parse|eval|run) <input-filename>"
 
 loadSource fileName = do
     text <- readFile fileName
