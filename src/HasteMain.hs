@@ -15,7 +15,11 @@ driver [progElem, resultElem, runButtonElem] =
         maybeRule <- getProg progElem
         setProp resultElem "textContent" $ case maybeRule of
             Just rule ->
-                show $ Eval.rewrite rule Rule.emptyCollection
+                case Eval.rewrite rule Rule.emptyCollection of
+                    Just c ->
+                        Rule.depict c
+                    Nothing ->
+                        ""
             Nothing ->
                 "<<Error while parsing program!!>>"
 

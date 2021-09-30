@@ -18,6 +18,13 @@ main = do
             putStrLn $ show rule
         ["eval", fileName] -> do
             (_, rule) <- loadSource fileName
+            case Eval.rewrite rule Rule.emptyCollection of
+                Just c -> do
+                    putStr $ Rule.depict c
+                Nothing -> do
+                    return ()
+        ["showeval", fileName] -> do
+            (_, rule) <- loadSource fileName
             putStrLn $ show $ Eval.rewrite rule Rule.emptyCollection
         ["run", fileName] -> do
             (pragmas, rule) <- loadSource fileName

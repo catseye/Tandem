@@ -19,6 +19,10 @@ type Collection = Map.Map Label String
 emptyCollection = Map.empty
 get l c = Map.findWithDefault "" l c
 put l b c = Map.insert l b c
+depict c = d $ Map.toAscList c
+    where
+        d [] = ""
+        d ((l, s):rest) = "\"" ++ l ++ "\"=\"" ++ s ++ "\"\n" ++ d rest
 
 startsWith s "" = True
 startsWith "" s = False
