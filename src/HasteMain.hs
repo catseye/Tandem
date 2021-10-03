@@ -3,6 +3,7 @@ module Main where
 import Haste.DOM (withElems, getValue, setProp)
 import Haste.Events (onEvent, MouseEvent(Click))
 
+import qualified Language.Tandem.Collection as Collection
 import qualified Language.Tandem.Rule as Rule
 import qualified Language.Tandem.Parser as Parser
 import qualified Language.Tandem.Eval as Eval
@@ -15,9 +16,9 @@ driver [progElem, resultElem, runButtonElem] =
         maybeRule <- getProg progElem
         setProp resultElem "textContent" $ case maybeRule of
             Just rule ->
-                case Eval.rewrite rule Rule.emptyCollection of
+                case Eval.rewrite rule Collection.empty of
                     Just c ->
-                        Rule.depict c
+                        Collection.depict c
                     Nothing ->
                         ""
             Nothing ->
