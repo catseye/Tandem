@@ -1,5 +1,5 @@
 *.exe
 *.hi
 *.o
-*.js
+demo/tandem.js
 *.jsmod

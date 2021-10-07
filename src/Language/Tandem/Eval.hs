@@ -1,6 +1,7 @@
 module Language.Tandem.Eval where
 
 import Language.Tandem.Rule
+import Language.Tandem.Collection
 
 rewrite :: Rule -> Collection -> Maybe Collection
 

@@ -146,7 +146,7 @@ Initial State
 At the beginning of a Tandem program with rewrite rule R, it can be assumed that, under normal conditions, for each label mentioned in the program, there exists a labelled stack in the collection with that label and it is initialized with an empty string. This leads to the following idiom to initialize stacks with initial values:
 
     S→0 &
-    T→$ &
+    T→"$" &
     K→1111 &
     ...rest of program goes here...
 
@@ -213,7 +213,7 @@ Example programs
 
 Writing finite automata, push-down automata, Turing machines, and other automata is quite natural in Tandem, because transition rules such as “In state 4, if the next character in the input is `g`, consume it and push `$` onto the stack and go to state 9” translate quite straightforwardly to rewrite rules such as
 
-    Q4 → 9 & Ig… → … & K… → $…
+    Q4 → 9 & Ig… → … & K… → "$"…
 
 #### Finite-state automaton
 
@@ -236,12 +236,12 @@ Here is a [push-down automaton](https://esolangs.org/wiki/push-down_automaton) t
     {B:I,O}
     O → N &
     Q → 0 &
-    K → $ &
+    K → "$" &
     (
-      Q0 → 1 & I`“`(`”`… → … & K… → $… |
-      Q1 → 1 & I`“`(`”`… → … & K… → X… |
-      Q1 → 1 & I`“`)`”`… → … & KX… → … |
-      Q1 → 0 & I`“`)`”`… → … & K$… → … |
+      Q0 → 1 & I"("… → … & K… → "$"… |
+      Q1 → 1 & I"("… → … & K… → X… |
+      Q1 → 1 & I")"… → … & KX… → … |
+      Q1 → 0 & I")"… → … & K"$"… → … |
       Q0 → 2 & I → & O… → Y
     )*
 

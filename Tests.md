@@ -35,7 +35,7 @@ Basic Semantics
     -> Tests for functionality "Evaluate Tandem Program"
 
     -> Functionality "Evaluate Tandem Program" is implemented by
-    -> shell command "bin/tandem eval %(test-body-file)"
+    -> shell command "bin/tandem showeval %(test-body-file)"
 
     0
     ===> Nothing
