@@ -1,12 +1,13 @@
 Tandem
 ======
 
-_Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/Tandem)
+_Try it online_ [@ catseye.tc](https://catseye.tc/installation/Tandem)
+| _Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/Tandem)
 | _See also:_ [Squishy2K](https://github.com/catseye/Squishy2K)
-∘ [Strelnokoff](https://github.com/catseye/Strelnokoff)
 ∘ [Cabra](https://github.com/catseye/Cabra)
 ∘ [Arboretuum](https://github.com/catseye/Arboretuum)
 ∘ [Tamsin](https://github.com/catseye/Tamsin)
+∘ [Vinegar](https://github.com/catseye/Vinegar)
 
 - - - -
 
