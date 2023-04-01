@@ -37,7 +37,9 @@ main = do
             abortWith "Usage: tandem (parse|eval|run) <input-filename>"
 
 loadSource fileName = do
-    text <- readFile fileName
+    handle <- openFile fileName ReadMode
+    -- hSetEncoding handle utf8
+    text <- hGetContents handle
     case Parser.parseTandem text of
         Right (pragmas, rule) -> do
             return (pragmas, rule)
