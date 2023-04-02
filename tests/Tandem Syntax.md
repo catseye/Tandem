@@ -1,6 +1,8 @@
 Tests for Tandem
 ================
 
+This document is written in Falderal 0.14 format.
+
 Basic Syntax
 ------------
 
@@ -29,52 +31,3 @@ Reverse sugar.
     %Mcba→fed & %M…cba→fed & %M…cba→…fed
     ===> Conj (RewExact "M" "abc" "def") (Conj (RewReplace "M" "abc" "def") (RewFront "M" "abc" "def"))
 
-Basic Semantics
----------------
-
-    -> Tests for functionality "Evaluate Tandem Program"
-
-    -> Functionality "Evaluate Tandem Program" is implemented by
-    -> shell command "bin/tandem showeval %(test-body-file)"
-
-    0
-    ===> Nothing
-
-    Q → 123
-    ===> Just (fromList [("Q","123")])
-
-    Q → 123 & R → 456
-    ===> Just (fromList [("Q","123"),("R","456")])
-
-    Q → 1 & Q1 → 2
-    ===> Just (fromList [("Q","2")])
-
-    Q → 1 & Q2 → 3
-    ===> Nothing
-
-    Q → 1 | R → 1
-    ???> more than one redex
-
-    Q → 1 & R… → 1 | Q1 → 2 & R… → 2
-    ===> Just (fromList [("Q","1"),("R","1")])
-
-    (Q → 1 & R… → 1 | Q1 → 2 & R… → 2)*
-    ===> Just (fromList [("Q","2"),("R","2")])
-
-Pragmas
--------
-
-    -> Tests for functionality "Run Tandem Program"
-
-    -> Functionality "Run Tandem Program" is implemented by
-    -> shell command "bin/tandem run %(test-body-file)"
-
-    {B:I,O}
-    {!This →is "my comment%.}
-    (Ia…->… & %O…->…b)*
-    <== aaa
-    ==> bbb
-
-    {B:B,B}1
-    <== Revcat me!
-    ==> !em tacveR
