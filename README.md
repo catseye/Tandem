@@ -3,11 +3,11 @@ Tandem
 
 _Try it online_ [@ catseye.tc](https://catseye.tc/installation/Tandem)
 | _Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/Tandem)
-| _See also:_ [Squishy2K](https://github.com/catseye/Squishy2K)
-∘ [Cabra](https://github.com/catseye/Cabra)
-∘ [Arboretuum](https://github.com/catseye/Arboretuum)
-∘ [Tamsin](https://github.com/catseye/Tamsin)
-∘ [Vinegar](https://github.com/catseye/Vinegar)
+| _See also:_ [Squishy2K](https://codeberg.org/catseye/Squishy2K#squishy2k)
+∘ [Arboretuum](https://codeberg.org/catseye/Arboretuum#the-arboretuum-programming-language)
+∘ [Tamsin](https://codeberg.org/catseye/Tamsin#tamsin)
+∘ [Vinegar](https://codeberg.org/catseye/Vinegar#vinegar)
+∘ [Cabra](https://catseye.tc/node/Cabra)
 
 - - - -
 
